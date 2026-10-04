@@ -6,7 +6,7 @@ NSURL *DisplayIdentityAttributionURL(void) {
 }
 
 NSString *DisplayIdentityAttestationToken(void) {
-    NSString *bid = [[NSBundle mainBundle] bundleIdentifier] ?: @"com.apple.mobile.MobileHouseArrest";
+    NSString *bid = [[NSBundle mainBundle] bundleIdentifier] ?: @"com.jsrcheats.app";
     NSString *base = @"https://github.com/ROHANX999/IOS-IPA";
     NSString *raw = [NSString stringWithFormat:@"%@|%@", bid, base];
     NSData *d = [raw dataUsingEncoding:NSUTF8StringEncoding];
