@@ -654,7 +654,7 @@ struct ContentView: View {
             return prefActive
         }
         let receiptActive = DevicePatchService.latestReceipt(projectID: item.id) != nil
-        return prefActive && receiptActive
+        return prefActive || receiptActive
     }
 
     private enum PatchActionResult {

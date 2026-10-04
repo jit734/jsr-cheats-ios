@@ -115,11 +115,15 @@ enum DevicePatchService {
         var roots: [String: URL] = [:]
 
         for bundleID in bundleIDs {
-            guard let path = ContainerStore.resolveAppContainerPath(bundleID: bundleID),
-                  ContainerStore.isApplicationContainerPath(path) else {
-                throw PatchPackageError.targetAppUnavailable(bundleID)
+            if let path = ContainerStore.resolveAppContainerPath(bundleID: bundleID),
+               ContainerStore.isApplicationContainerPath(path) {
+                roots[bundleID] = PatchPathValidator.canonicalFileURL(URL(fileURLWithPath: path, isDirectory: true))
+            } else {
+                let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let workspace = docs.appendingPathComponent("Patches/Workspace/\(bundleID)", isDirectory: true)
+                try? FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+                roots[bundleID] = PatchPathValidator.canonicalFileURL(workspace)
             }
-            roots[bundleID] = PatchPathValidator.canonicalFileURL(URL(fileURLWithPath: path, isDirectory: true))
         }
         return try operation(roots)
     }
